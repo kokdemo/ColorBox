@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/vue/dist/vue.min.js"></script>
+    <style>
+        .colorBox{
+            display: inline-block;
+            flex-flow: row wrap;
+        }
+        .baseColor{
+            display: inline-block;
+            position: static;
+            width: 20%;
+            height: 60px;
+        }
+        .baseColor span{
+            color: #FFF;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="panel-title">choose color</div>
+    <div class="colorBox">
+        <div class="baseColor" v-repeat="color : baseColors" v-style="background-color:'#'+color.r+color.g+color.b">
+            <span>{{color.name}}</span>
+        </div>
+    </div>
+</div>
+<script>
+    var color = new Vue({
+        el: 'body',
+        data: {
+            baseColors: [
+                {r: "f4", g: "43", b: "36", name: "red"},
+                {r: "e9", g: "1e", b: "63", name: "pink"},
+                {r: "9c", g: "27", b: "b0", name: "purple"},
+                {r: "67", g: "3a", b: "b7", name: "deep-purple"},
+                {r: "3f", g: "51", b: "b5", name: "indigo"},
+                {r: "21", g: "96", b: "f3", name: "blue"},
+                {r: "03", g: "a9", b: "f4", name: "light-blue"},
+                {r: "00", g: "bc", b: "d4", name: "cyan"},
+                {r: "00", g: "96", b: "88", name: "teal"},
+                {r: "4c", g: "af", b: "50", name: "green"},
+                {r: "8b", g: "c3", b: "4a", name: "light-green"},
+                {r: "cd", g: "dc", b: "39", name: "lime"},
+                {r: "ff", g: "eb", b: "3b", name: "yellow"},
+                {r: "ff", g: "c1", b: "07", name: "amber"},
+                {r: "ff", g: "98", b: "00", name: "orange"},
+                {r: "ff", g: "57", b: "22", name: "deep-orange"},
+                {r: "79", g: "55", b: "48", name: "brown"},
+                {r: "9e", g: "9e", b: "9e", name: "grey"},
+                {r: "60", g: "7d", b: "8b", name: "blue-grey"}
+            ]
+        },
+        method: {
+
+        }
+    });
+</script>
+</body>
+</html>
