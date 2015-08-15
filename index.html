@@ -3,65 +3,505 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
-    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/vue/dist/vue.min.js"></script>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link href='http://fonts.useso.com/css?family=Oswald:400' rel='stylesheet' type='text/css'>
     <style>
-        .colorBox{
-            display: inline-block;
+        body {
+            height: 100vh;
+        }
+
+        .navbar,.navbar .container {
+            height: 5vh;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .container{
+            margin-top: 3vh;
+            height: 90vh;
+        }
+
+        .colorBox {
+            width: 108vh;
             flex-flow: row wrap;
+            top: 60px;
+            margin: auto;
+            font-family: 'Oswald', sans-serif;
         }
-        .baseColor{
+
+        .colorBox .baseColor h4 {
+            margin-top: 35%;
+        }
+
+        .colorBox .baseColor span {
+            font-size: 1.5em;
+        }
+
+        .baseColor {
+            width: 18vh;
+            height: 18vh;
             display: inline-block;
-            position: static;
-            width: 20%;
-            height: 60px;
-        }
-        .baseColor span{
-            color: #FFF;
             position: relative;
+            text-align: center;
+            color: #FFF;
+        }
+
+        .baseColor.center-block {
+            width: 18vh;
+            height: 18vh;
+        }
+
+        .baseColor.center-block span {
+            color: #FFF;
+            display: block;
+            padding-top: 40%;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5em;
+        }
+
+        .colorExpand {
+            margin: auto;
+            text-align: center;
+        }
+
+        .colorList {
+            width: 100%;
+            padding: 0;
+            bottom: 0;
+            position: absolute;
+        }
+
+        .colorList .colors {
+            width: 90vh;
+            margin: auto;
+            vertical-align: bottom;
+        }
+
+        .colorList .baseColor {
+            display: inline-block;
+            width: 18vh;
+            height: 9vh;
+        }
+
+        .colorList .baseColor span {
+            padding-top: 15%;
+        }
+
+        .colorHistory .baseColor {
+            display: block;
+            width: 3vh;
+        }
+
+        .colorHistory {
+            padding: 0;
+            position: absolute;
+            right: 0vh;
+            top: 51px;
+        }
+
+        .main {
+            height: 100%;
+        }
+
+        .addButton {
+            position: absolute;
+            bottom: 0.5vh;
+            right: 0.5vh;
+            height: 4vh;
+            width: 4vh;
+            font-size: 1em;
+            font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
+            border: 2px solid #FFF;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0)
+        }
+
+        .colorDisplay {
+            width: 1140px;
+            margin: auto;
+        }
+
+        .colorTag {
+            width: 100%;
+            padding: 0;
+            bottom: 9vh;
+            position: absolute;
+            margin: auto;
+            text-align: center;
+            display: table; /* 调教webkit*/
+            word-spacing: -1em;
+        }
+
+        .colorTag li {
+            word-spacing: 0;
+            display: inline-block;
+            width: 18vh;
+            height: 9vh;
+            border: 1px solid #EEE;
+            margin: 0;
+        }
+
+        .colorTag li h4 {
+            margin: 0 auto;
+            line-height: 9vh;
+            vertical-align: middle;
         }
     </style>
 </head>
-<body>
-<div class="container">
-    <div class="panel-title">choose color</div>
-    <div class="colorBox">
-        <div class="baseColor" v-repeat="color : baseColors" v-style="background-color:'#'+color.r+color.g+color.b">
-            <span>{{color.name}}</span>
+<body >
+<nav class="navbar navbar-inverse">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">ColorBox</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a v-on="click : changeStep(0)">基础色板</a></li>
+                <li><a v-on="click : changeStep(2)">效果演示</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.-fluid -->
+</nav>
+<div class="container" v-style="background-color: 'rgb('+colorExpand.List[4][0]+ ',' + colorExpand.List[4][1] + ','+ colorExpand.List[4][2] + ')'">
+        <div class="colorBox" v-if="step==0">
+            <div class="baseColor " v-repeat="color : baseColors" v-style="background-color:'#'+color.r+color.g+color.b"
+                 v-on="click: choose(color,16)">
+                <h4>{{color.name}}</h4>
+                <span>{{'#'+color.r+color.g+color.b}}</span>
+            </div>
+        </div>
+        <div class="colorExpand" v-if="step==1">
+            <div class="baseColor center-block"
+                 v-style="background-color: 'rgb('+colorExpand.Comple[0]+ ',' + colorExpand.Comple[1] + ','+ colorExpand.Comple[2] + ')'"
+                 v-on="click: choose(colorExpand.Comple,10)">
+                <span>{{'#'+string16(colorExpand.Comple[0])+string16(colorExpand.Comple[1])+string16(colorExpand.Comple[2])}}</span>
+                <button class="addButton" v-on="click: list(colorExpand.Comple,$event)"
+                        v-show="colorExpand.List.length<5">+
+                </button>
+            </div>
+            <div class="Hues">
+                <div class="colorChoose baseColor center-block" v-repeat="color: colorExpand.Hue"
+                     v-style="background-color: 'rgb('+color[0]+ ',' + color[1] + ','+ color[2] + ')'"
+                     v-on="click: choose(color,10)">
+                    <span>{{'#'+string16(color[0]) + string16(color[1]) + string16(color[2])}}</span>
+                    <button class="addButton" v-on="click: list(color,$event)" v-show="colorExpand.List.length<5">+
+                    </button>
+                </div>
+            </div>
+            <div class="Brightnesss">
+                <div class="colorChoose baseColor center-block" v-repeat="color: colorExpand.Brightness"
+                     v-style="background-color: 'rgb('+color[0]+ ',' + color[1] + ','+ color[2]+ ')'"
+                     v-on="click: choose(color,10)">
+                    <span>{{'#'+string16(color[0]) + string16(color[1]) + string16(color[2])}}</span>
+                    <button class="addButton" v-on="click: list(color,$event)" v-show="colorExpand.List.length<5">+
+                    </button>
+                </div>
+            </div>
+            <div class="Gray">
+                <div class="colorChoose baseColor center-block" v-repeat="color: colorExpand.Gray"
+                     v-style="background-color: 'rgb('+color[0]+ ',' + color[1] + ','+ color[2]+ ')'"
+                     v-on="click: choose(color,10)">
+                    <span>{{'#'+string16(color[0]) + string16(color[1]) + string16(color[2])}}</span>
+                    <button class="addButton" v-on="click: list(color,$event)" v-show="colorExpand.List.length<5">+
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="colorDisplay" v-if="step==2">
+            <div class="col-xs-10">
+                <div class="jumbotron"
+                     v-style="background-color: 'rgb('+colorExpand.List[0][0]+ ',' + colorExpand.List[0][1] + ','+ colorExpand.List[0][2] + ')'">
+                    <h1 v-style="color: 'rgb('+colorExpand.List[4][0]+ ',' + colorExpand.List[4][1] + ','+ colorExpand.List[4][2] + ')'">
+                        更简单的配色方案</h1>
+
+                    <p v-style="color: 'rgb('+colorExpand.List[4][0]+ ',' + colorExpand.List[4][1] + ','+ colorExpand.List[4][2] + ')'">
+                        这个页面会显示您当前选则颜色对应的配色方案。
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h2 v-style="color: 'rgb('+colorExpand.List[0][0]+ ',' + colorExpand.List[0][1] + ','+ colorExpand.List[0][2] + ')'">同类色彩方案</h2>
+                        <p>
+                            这个方案中，辅助色和强调色都在主色的左右，这样会让整个页面有一致感。
+                        </p>
+
+                        <p><a class="btn" v-style="background-color: 'rgb('+colorExpand.List[1][0]+ ',' + colorExpand.List[1][1] + ','+ colorExpand.List[1][2] + ')',color : '#FFF'" role="button">示例按钮</a></p>
+                    </div>
+                    <!--/.col-xs-6.col-lg-4-->
+                    <div class="col-xs-4">
+                        <h2 v-style="color: 'rgb('+colorExpand.List[0][0]+ ',' + colorExpand.List[0][1] + ','+ colorExpand.List[0][2] + ')'">临近色彩方案</h2>
+
+                        <p>这个方案中，辅助色和强调色会稍微远离主色一些，这让整个页面更加的灵动。 </p>
+
+                        <p><a class="btn" v-style="background-color: 'rgb('+colorExpand.List[1][0]+ ',' + colorExpand.List[1][1] + ','+ colorExpand.List[1][2] + ')',color : '#FFF'" role="button">示例按钮</a></p>
+                    </div>
+                    <!--/.col-xs-6.col-lg-4-->
+                    <div class="col-xs-4">
+                        <h2 v-style="color: 'rgb('+colorExpand.List[0][0]+ ',' + colorExpand.List[0][1] + ','+ colorExpand.List[0][2] + ')'">对比色彩方案</h2>
+
+                        <p>这个方案中，强调色会选择当前颜色的反色的色系，这会让整个页面醒目有力，但也会造成杂乱的副作用 </p>
+
+                        <p><a class="btn" v-style="background-color: 'rgb('+colorExpand.List[1][0]+ ',' + colorExpand.List[1][1] + ','+ colorExpand.List[1][2] + ')',color : '#FFF'" role="button">示例按钮</a></p>
+                    </div>
+                </div>
+                <!--/row-->
+            </div>
+            <!--/.col-xs-12.col-sm-9-->
+
+            <div class="col-xs-2 sidebar-offcanvas" id="sidebar">
+                <div class="list-group">
+                    <a href="#" class="list-group-item active" v-style="background-color: 'rgb('+colorExpand.List[3][0]+ ',' + colorExpand.List[3][1] + ','+ colorExpand.List[3][2] + ')' ">Link</a>
+                    <a href="#" class="list-group-item">Link</a>
+                    <a href="#" class="list-group-item">Link</a>
+                    <a href="#" class="list-group-item">Link</a>
+                    <a href="#" class="list-group-item">Link</a>
+                    <a href="#" class="list-group-item">Link</a>
+                    <a href="#" class="list-group-item">Link</a>
+                    <a href="#" class="list-group-item">Link</a>
+                    <a href="#" class="list-group-item">Link</a>
+                    <a href="#" class="list-group-item">Link</a>
+                </div>
+            </div>
+            <!--/.sidebar-offcanvas-->
+
+        </div>
+
+</div>
+<div class="colorList">
+        <ul class="colorTag" v-show="step==2">
+            <li><h4>主色</h4></li>
+            <li><h4>辅助色</h4></li>
+            <li><h4>辅助色</h4></li>
+            <li><h4>强调色</h4></li>
+            <li><h4>背景色</h4></li>
+        </ul>
+        <div class="colors">
+            <div class="colorChoose baseColor center-block" v-repeat="color: colorExpand.List"
+                 v-style="background-color: 'rgb('+color[0]+ ',' + color[1] + ','+ color[2]+ ')'"
+                 v-on="click: deleteColor(color,$index)">
+                <span>{{'#'+string16(color[0]) + string16(color[1]) + string16(color[2])}}</span>
+            </div>
+        </div>
+
+    </div>
+    <div class="colorHistory">
+        <div class="colorChoose baseColor center-block" v-repeat="color: colorExpand.History"
+             v-style="background-color: 'rgb('+color[0]+ ',' + color[1] + ','+ color[2]+ ')'"
+             v-on="click: choose(color,10)">
         </div>
     </div>
-</div>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/vue/dist/vue.min.js"></script>
+<!--<script src="livejs.js"></script>-->
 <script>
-    var color = new Vue({
-        el: 'body',
-        data: {
-            baseColors: [
-                {r: "f4", g: "43", b: "36", name: "red"},
-                {r: "e9", g: "1e", b: "63", name: "pink"},
-                {r: "9c", g: "27", b: "b0", name: "purple"},
-                {r: "67", g: "3a", b: "b7", name: "deep-purple"},
-                {r: "3f", g: "51", b: "b5", name: "indigo"},
-                {r: "21", g: "96", b: "f3", name: "blue"},
-                {r: "03", g: "a9", b: "f4", name: "light-blue"},
-                {r: "00", g: "bc", b: "d4", name: "cyan"},
-                {r: "00", g: "96", b: "88", name: "teal"},
-                {r: "4c", g: "af", b: "50", name: "green"},
-                {r: "8b", g: "c3", b: "4a", name: "light-green"},
-                {r: "cd", g: "dc", b: "39", name: "lime"},
-                {r: "ff", g: "eb", b: "3b", name: "yellow"},
-                {r: "ff", g: "c1", b: "07", name: "amber"},
-                {r: "ff", g: "98", b: "00", name: "orange"},
-                {r: "ff", g: "57", b: "22", name: "deep-orange"},
-                {r: "79", g: "55", b: "48", name: "brown"},
-                {r: "9e", g: "9e", b: "9e", name: "grey"},
-                {r: "60", g: "7d", b: "8b", name: "blue-grey"}
-            ]
-        },
-        method: {
+function rgb2hsb(rgb) {
+    // r,g,b values are from 0 to 1
+    // h = [0,360], s = [0,1], v = [0,1]
+    // if s == 0, then h = -1 (undefined)
+    var min, max, delta, tmp, hsv = [];
+    min = Math.min(rgb[0], rgb[1], rgb[2]);
+    max = Math.max(rgb[0], rgb[1], rgb[2]);
+    hsv[2] = max; // value
+    delta = max - min;
+    if (max != 0) {
+        hsv[1] = delta / max; // s
+    } else {
+        // r = g = b = 0 // s = 0, v is undefined white
+        hsv[1] = 0;
+        hsv[0] = -1;
+        return hsv
+    }
+    if (rgb[0] == max) {
+        hsv[0] = ( rgb[1] - rgb[2] ) / delta; // between yellow & magenta
+    } else if (rgb[1] == max) {
+        hsv[0] = 2 + ( rgb[2] - rgb[0] ) / delta; // between cyan & yellow
+    } else {
+        hsv[0] = 4 + ( rgb[0] - rgb[1] ) / delta; // between magenta & cyan
+    }
+    hsv[0] = hsv[0] * 60; // degrees
+    if (hsv[0] < 0) hsv[0] += 360;
+    return hsv
+}
+function hsb2rgb(hsv) {
+    var f, p, q, t, i;
+    var H = hsv[0], S = hsv[1], V = hsv[2];
+    var R, G, B;
+    if (S == 0) {
+        // achromatic (grey)
+        R = G = B = V;
+        return;
+    }
+    H = H / 60; // sector 0 to 5
+    i = Math.floor(H);
+    f = H - i; // factorial part of h
+    p = Math.ceil(V * ( 1 - S ));
+    q = Math.ceil(V * ( 1 - S * f ));
+    t = Math.ceil(V * ( 1 - S * ( 1 - f ) ));
+    switch (i) {
+        case 0:
+            R = V;
+            G = t;
+            B = p;
+            break;
+        case 1:
+            R = q;
+            G = V;
+            B = p;
+            break;
+        case 2:
+            R = p;
+            G = V;
+            B = t;
+            break;
+        case 3:
+            R = p;
+            G = q;
+            B = V;
+            break;
+        case 4:
+            R = t;
+            G = p;
+            B = V;
+            break;
+        default: // case 5:
+            R = V;
+            G = p;
+            B = q;
+            break;
+    }
+    return [R, G, B]
+}
 
+var color = new Vue({
+    el: 'body',
+    data: {
+        step: 0,
+        baseColors: [
+            {r: "f4", g: "43", b: "36", name: "red"},
+            {r: "e9", g: "1e", b: "63", name: "pink"},
+            {r: "9c", g: "27", b: "b0", name: "purple"},
+            {r: "67", g: "3a", b: "b7", name: "deep-purple"},
+            {r: "3f", g: "51", b: "b5", name: "indigo"},
+            {r: "21", g: "96", b: "f3", name: "blue"},
+            {r: "03", g: "a9", b: "f4", name: "light-blue"},
+            {r: "00", g: "bc", b: "d4", name: "cyan"},
+            {r: "00", g: "96", b: "88", name: "teal"},
+            {r: "4c", g: "af", b: "50", name: "green"},
+            {r: "8b", g: "c3", b: "4a", name: "light-green"},
+            {r: "cd", g: "dc", b: "39", name: "lime"},
+            {r: "ff", g: "eb", b: "3b", name: "yellow"},
+            {r: "ff", g: "c1", b: "07", name: "amber"},
+            {r: "ff", g: "98", b: "00", name: "orange"},
+            {r: "ff", g: "57", b: "22", name: "deep-orange"},
+            {r: "79", g: "55", b: "48", name: "brown"},
+            {r: "60", g: "7d", b: "8b", name: "blue-grey"}
+        ],
+        colorExpand: {
+            Comple: [],
+            Brightness: [],
+            Hue: [],
+            Saturation: [],
+            List: [],
+            Gray: [],
+            History: []
         }
-    });
+    },
+    methods: {
+        choose: function (colors, p) {
+            this.$data.step = 1;
+            var rgb = [];
+            if (p == 16) {
+                rgb[0] = parseInt(colors.r, 16);
+                rgb[1] = parseInt(colors.g, 16);
+                rgb[2] = parseInt(colors.b, 16);
+            } else {
+                rgb = colors;
+            }
+            var hsb = rgb2hsb(rgb);
+            //色相 饱和度 亮度
+            var hue = [];
+            hue.push((hsb[0] + 360 - 60) % 360);
+            hue.push((hsb[0] + 360 - 30) % 360);
+            hue.push((hsb[0] + 360 - 0) % 360);
+            hue.push((hsb[0] + 360 + 30) % 360);
+            hue.push((hsb[0] + 360 + 60) % 360);
+            this.$data.colorExpand.Hue.length = 0;
+            for (var i = 0; i < hue.length; i++) {
+                this.$data.colorExpand.Hue.push(hsb2rgb([hue[i], hsb[1], hsb[2]]));
+            }
+            var brightness = [];
+            var border = function (x, min, max) {
+                if (x < min) {
+                    x = min;
+                }
+                if (x > max) {
+                    x = max;
+                }
+                return x
+            };
+            brightness.push(border(hsb[2] + 50, 0, 255));
+            brightness.push(border(hsb[2] + 25, 0, 255));
+            brightness.push(border(hsb[2] - 0, 0, 255));
+            brightness.push(border(hsb[2] - 25, 0, 255));
+            brightness.push(border(hsb[2] - 50, 0, 255));
+            this.$data.colorExpand.Brightness.length = 0;
+            for (var i = 0; i < brightness.length; i++) {
+                this.$data.colorExpand.Brightness.push(hsb2rgb([hsb[0], hsb[1], brightness[i]]));
+            }
+            var gray = [];
+            gray.push(border(hsb[2] + 50, 0, 255));
+            gray.push(border(hsb[2] + 25, 0, 255));
+            gray.push(border(hsb[2] - 0, 0, 255));
+            gray.push(border(hsb[2] - 25, 0, 255));
+            gray.push(border(hsb[2] - 50, 0, 255));
+            this.$data.colorExpand.Gray.length = 0;
+            for (var i = 0; i < gray.length; i++) {
+                this.$data.colorExpand.Gray.push([gray[i], gray[i], gray[i]]);
+            }
+            this.$data.colorExpand.Comple = [255 - rgb[0], 255 - rgb[1], 255 - rgb[2]];
+            var len = this.$data.colorExpand.History.length;
+            if (len < 5) {
+                this.$data.colorExpand.History.push(rgb);
+            } else {
+                this.$data.colorExpand.History.shift();
+                this.$data.colorExpand.History.push(rgb);
+            }
+        },
+        deleteColor: function (color, $index) {
+            console.info($index);
+            this.$data.colorExpand.List.splice($index, 1);
+        },
+        list: function (color, e) {
+            var cloneObj = JSON.parse(JSON.stringify(color));
+            console.info(cloneObj);
+            var len = this.$data.colorExpand.List.length;
+            if (len < 5) {
+                this.$data.colorExpand.List.push(cloneObj);
+            } else {
+                console.info(this.$data.colorExpand.List);
+                this.$data.colorExpand.List.shift();
+                this.$data.colorExpand.List.push(cloneObj);
+            }
+            e.stopPropagation();
+            return false
+        },
+        string16: function (number) {
+            var x = number.toString(16);
+            if (x.length == 1) {
+                return '0' + x
+            } else {
+                return x
+            }
+        },
+        changeStep: function (num) {
+            this.$data.step = num;
+        }
+    }
+});
 </script>
 </body>
 </html>
