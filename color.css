@@ -1,0 +1,136 @@
+body {
+            height: 100vh;
+        }
+
+        .navbar,.navbar .container {
+            height: 5vh;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .container{
+            margin-top: 3vh;
+            height: 90vh;
+        }
+
+        .colorBox {
+            width: 108vh;
+            flex-flow: row wrap;
+            top: 60px;
+            margin: auto;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .colorBox .baseColor h4 {
+            margin-top: 35%;
+        }
+
+        .colorBox .baseColor span {
+            font-size: 1.5em;
+        }
+
+        .baseColor {
+            width: 18vh;
+            height: 18vh;
+            display: inline-block;
+            position: relative;
+            text-align: center;
+            color: #FFF;
+        }
+
+        .baseColor.center-block {
+            width: 18vh;
+            height: 18vh;
+        }
+
+        .baseColor.center-block span {
+            color: #FFF;
+            display: block;
+            padding-top: 40%;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5em;
+        }
+
+        .colorExpand {
+            margin: auto;
+            text-align: center;
+        }
+
+        .colorList {
+            width: 100%;
+            padding: 0;
+            bottom: 0;
+            position: absolute;
+        }
+
+        .colorList .colors {
+            width: 90vh;
+            margin: auto;
+            vertical-align: bottom;
+        }
+
+        .colorList .baseColor {
+            display: inline-block;
+            width: 18vh;
+            height: 9vh;
+        }
+
+        .colorList .baseColor span {
+            padding-top: 15%;
+        }
+
+        .colorHistory .baseColor {
+            display: block;
+            width: 3vh;
+        }
+
+        .colorHistory {
+            padding: 0;
+            position: absolute;
+            right: 0vh;
+            top: 51px;
+        }
+
+        .addButton {
+            position: absolute;
+            bottom: 0.5vh;
+            right: 0.5vh;
+            height: 4vh;
+            width: 4vh;
+            font-size: 1em;
+            font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
+            border: 2px solid #FFF;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0)
+        }
+
+        .colorDisplay {
+            width: 1140px;
+            margin: auto;
+        }
+
+        .colorTag {
+            width: 100%;
+            padding: 0;
+            bottom: 9vh;
+            position: absolute;
+            margin: auto;
+            text-align: center;
+            display: table; /* 调教webkit*/
+            word-spacing: -1em;
+        }
+
+        .colorTag li {
+            word-spacing: 0;
+            display: inline-block;
+            width: 18vh;
+            height: 9vh;
+            border: 1px solid #EEE;
+            margin: 0;
+        }
+
+        .colorTag li h4 {
+            margin: 0 auto;
+            line-height: 9vh;
+            vertical-align: middle;
+        }
